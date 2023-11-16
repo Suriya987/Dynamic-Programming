@@ -1,0 +1,101 @@
+
+fibonacci num
+  0 1 1 2 3 5 8 . . . .
+  
+  Types of ways
+    1. Recursion
+    2. Dp
+
+DP
+   1.if we need the curr num means we need prev and prev2
+   O(N)  Time complexity
+   O(1)  Space complexity
+
+Recursion
+   1. generating the value for every index and the calculate
+     It takes O(2^N) space complexity and O(1)  Time complexity,
+
+
+
+
+Recursive approach
+
+/*
+    Time complexity: O(2^N)
+    Space complexity: O(N) 
+
+    Where 'N' reprents the "Nth" number .
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int recur(int n)
+{
+    if (n <= 1)
+    {
+        return n;
+    }
+    return recur(n - 1) + recur(n - 2);
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    cout<<recur(n)<<endl;
+}
+
+Dp Approach 1:
+
+/*
+    Time complexity: O(N)
+    Space complexity: O(N) 
+
+    Where 'N' reprents the "Nth" number .
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n;
+    // declaring an 'n' size array.
+    int dp[n + 1];
+    dp[0] = 0;
+    dp[1] = 1;
+    for (int i = 2; i <= n; i++)
+    {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+    cout<<dp[n]<<endl;
+}
+
+
+Dp approach 2:  (optimized)
+
+  /*
+    Time complexity: O(N)
+    Space complexity: O(1) 
+
+    Where 1 represents the constant and 'N' reprents the "Nth" number .
+*/
+
+  #include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int prev=1,prev2=0,n;
+    cin>>n;
+      for (int i = 1; i <n; i++) {
+        int currEle = prev + prev2;
+        prev2 = prev;
+        prev = currEle;
+       // cout<<prev;
+      }
+      cout << prev;
+}
