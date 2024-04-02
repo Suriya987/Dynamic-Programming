@@ -1,0 +1,94 @@
+Source : Leetcode
+
+Example 1:
+
+Input: words = ["e","a","b"], groups = [0,0,1]
+
+Output: ["e","b"]
+
+Explanation: A subsequence that can be selected is ["e","b"] because groups[0] != groups[2].
+Another subsequence that can be selected is ["a","b"] because groups[1] != groups[2]. It can be demonstrated that the
+length of the longest subsequence of indices that satisfies the condition is 2.
+
+Example 2:
+
+Input: words = ["a","b","c","d"], groups = [1,0,1,1]
+
+Output: ["a","b","c"]
+
+Explanation: A subsequence that can be selected is ["a","b","c"] because groups[0] != groups[1] and groups[1] != groups[2].
+Another subsequence that can be selected is ["a","b","d"] because groups[0] != groups[1] and groups[1] != groups[3]. 
+It can be shown that the length of the longest subsequence of indices that satisfies the condition is 3.
+
+
+Brute force approach :
+
+Time complexity : O(N*N) 
+
+Space Complexity : O(N) 
+
+class Solution {
+public:
+    vector<string> getLongestSubsequence(vector<string>& words, vector<int>& groups) {
+                             
+            // traversing the vector string and add the characters into the vector list which
+            // index is not equal to previuos groups value
+      // if the new string vector size is greater than the previous res vector string then change the value of the res 
+    //return the res at the end.
+
+               int size=words.size();
+               vector<string> res;
+               
+            for(int i=0;i<size;i++)
+            {
+                vector<string> temp;
+                for(int j=i;j<size;j++)
+                {
+                    if(i==j)
+                       {
+                        temp.push_back(words[j]);
+                       }
+                       else
+                         {
+                            if(groups[j]!=groups[j-1])
+                            {
+                                temp.push_back(words[j]);
+                            }
+                         }
+                }
+                if(temp.size()>res.size())
+                   res=temp;
+            }
+            return res;
+    }
+};
+
+optimized :
+
+Time Complexity : O(N)
+Space Complexity : O(1)
+
+soln:
+
+class Solution {
+public:
+    vector<string> getLongestSubsequence(vector<string>& words, vector<int>& groups) {
+                             
+          //traversing linearly using the previuos groups element and check the current it is same skip it and it is not same then add it and uodate the lastEle
+
+               int size=words.size();
+               vector<string> res;
+               
+               int lastEle = groups[0];
+               res.push_back(words[0]);
+               for(int i=1;i<size;i++)
+               {
+                   if(groups[i]!=lastEle)
+                      {
+                        lastEle=groups[i];
+                        res.push_back(words[i]);
+                      }
+               }
+            return res;
+    }
+};
