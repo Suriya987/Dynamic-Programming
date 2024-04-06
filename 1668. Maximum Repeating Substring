@@ -1,0 +1,93 @@
+Source : Leetcode
+
+For a string sequence, a string word is k-repeating if word concatenated k times is a substring of sequence. 
+The word's maximum k-repeating value is the highest value k where word is k-repeating in sequence.
+If word is not a substring of sequence, word's maximum k-repeating value is 0.
+
+Given strings sequence and word, return the maximum k-repeating value of word in sequence.
+
+Example 1:
+
+Input: sequence = "ababc", word = "ab"
+Output: 2
+Explanation: "abab" is a substring in "ababc".
+Example 2:
+
+Input: sequence = "ababc", word = "ba"
+Output: 1
+Explanation: "ba" is a substring in "ababc". "baba" is not a substring in "ababc".
+Example 3:
+
+Input: sequence = "ababc", word = "ac"
+Output: 0
+Explanation: "ac" is not a substring in "ababc". 
+
+
+Brute Force :
+
+Time Complexity : O(N*N)
+   // at the worst case it will look for using evry ith index to n-1 index 
+Space Complexity : O(1) 
+
+class Solution {
+public:
+    int maxRepeating(string sequence, string word) {
+          
+          if(word.size()==1 && sequence.size()==1)
+           {
+                 if(sequence[0]==word[0])
+                    return 1;
+           }
+          int wLen=word.size();
+          int sLen = sequence.size();
+        
+        //brute force approach 
+
+         /*
+              1. going to start from the ith index and then look for word which is matching 
+              2. if any subsequence that breaks the linearity, i am going to start from the next 
+                     index and i am not move ahead anymore using that current index 
+              3. like wise after every next index i am going to save the count 
+                     store it in the res variable which iteration has the higher value.
+         */
+
+           int res=0;
+         //outer loop for accessing the i th index
+
+         for(int i=0;i<sLen;i++)
+         {
+               string temp;
+               int ind=i,ind2=0,count=0;
+
+               //innner loop for finding the subsequence 
+            while(1 && ind<sLen)
+            {
+                if(sequence[ind]==word[ind2])
+                {
+                    temp+=sequence[ind];
+                }
+                else 
+                  break;
+                   
+                    if(temp.size() == word.size())
+                    {
+                        //if i encountered the correct substring i need to move forward 
+                        if(temp==word){
+                            ind2=-1;  // for starting the ind of word element
+                          count++;
+                          temp=""; // after we need to reset the temp to start from the first.
+                        }
+                        else 
+                          break;
+                    }
+                    ind++;
+                    ind2++;
+                    
+            }
+            if(res<count)
+              res=count;
+         }
+         return res;
+         
+    }
+};
