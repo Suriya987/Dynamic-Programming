@@ -19,7 +19,7 @@ Explanation: There are three ways to climb to the top.
 3. 2 steps + 1 step
 
 
-Soln :
+Soln :  using recurvise and vector 
 
 Time complexity : O(N)
 Space Complexity : O(N)+O(N) 
@@ -43,6 +43,28 @@ public:
         vector<int> dp(n+1,-1);
         return Func(n,dp);
     }
+};
+
+Optimised tabulation approach
+
+Time complexity : O(N)
+Space Complexity : O(1)
+
+class Solution {
+ public:  
+   int climbStairs(int n) {
+         int prev1=1;
+         int prev2=1;
+        
+         for(int i=2;i<=n;i++)
+         {
+            int  curr=prev1+prev2;
+            prev1=prev2;
+            prev2=curr;
+         }
+
+         return prev2;
+   }
 };
 
 // 2-1  = 1 
