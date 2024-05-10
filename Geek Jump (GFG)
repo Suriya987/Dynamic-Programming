@@ -90,10 +90,10 @@ Space Complexity : O(1)
            
             for(int i=1;i<n;i++)
             {
-                int first = prev1+abs(height[i]-height[i-1]);
+                int first = prev2+abs(height[i]-height[i-1]);
                 int sec=INT_MAX;
                 if(i>1) {
-                    sec=prev2+abs(height[i]-height[i-2]);
+                    sec=prev1+abs(height[i]-height[i-2]);
                 }
                 
                 int curr= min(first,sec);
