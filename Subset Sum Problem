@@ -1,0 +1,56 @@
+Source : GFG
+
+
+Given an array of non-negative integers, and a value sum, determine if there is a subset of the given set with sum equal to given sum. 
+
+
+Example 1:
+
+Input:
+N = 6
+arr[] = {3, 34, 4, 12, 5, 2}
+sum = 9
+Output: 1 
+Explanation: Here there exists a subset with
+sum = 9, 4+3+2 = 9.
+
+Approach : Recursive + Memoization  ( top down approach )
+
+Time complexity : O(N*SUM)
+Space Complexity : O(N*SUM) + O(N)
+
+class Solution{   
+public:
+    bool func(int ind,int sum,vector<int> &arr, vector<vector<int>> &dp)
+    {
+        if(sum == 0) return true;
+        //base case
+         if(ind==0 )
+            {
+             if(arr[ind]-sum==0)
+             return 1;
+             else
+             {
+             return false;
+             }
+            }
+          
+          if(dp[ind][sum]!=-1)  return dp[ind][sum];
+          
+          
+         bool Take = false;
+            if(arr[ind]<=sum)
+              Take=func(ind-1,sum-arr[ind],arr,dp);
+         bool notTake = func(ind-1,sum,arr,dp);
+         
+        return dp[ind][sum] = Take || notTake;
+    }
+    bool isSubsetSum(vector<int>arr, int sum){
+        
+         int n=arr.size();
+         vector<vector<int>> dp(n, vector<int>(sum + 1, -1));
+          
+           return func(n-1,sum,arr,dp);
+           
+    }
+};
