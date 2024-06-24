@@ -1,0 +1,96 @@
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+
+Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
+
+You may assume that you have an infinite number of each kind of coin.
+
+The answer is guaranteed to fit into a signed 32-bit integer.
+
+Example 1:
+
+Input: amount = 5, coins = [1,2,5]
+Output: 4
+Explanation: there are four ways to make up the amount:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+Example 2:
+
+Input: amount = 3, coins = [2]
+Output: 0
+Explanation: the amount of 3 cannot be made up just with coins of 2.
+Example 3:
+
+Input: amount = 10, coins = [10]
+Output: 1
+
+Approach : Both tabulation and memoization 
+
+for memoization
+
+Time Complexity : O(N*Target)
+Space Complexity : O(N*Target) + O(N)
+
+for tabulation
+
+Time Complexity : O(N*Target)
+Space Complexity : O(N*Target)
+
+class Solution {
+public:
+    int func(int ind,int amount,vector<int>&coins,vector<vector<int>>&dp)
+    {
+        //base case
+          if(ind==0)
+          {
+            if(amount%coins[ind]==0)
+              return 1;
+              else 
+              return 0;
+          }
+
+          //checking if it is previously computed
+          if(dp[ind][amount]!=-1)  return dp[ind][amount];
+
+          int notPick=0+func(ind-1,amount,coins,dp);
+          int pick=0;
+          if(coins[ind]<=amount)
+          {
+            pick=func(ind,amount-coins[ind],coins,dp);
+          }
+
+          return dp[ind][amount]=notPick+pick;
+    }
+    int tabulation(int ind,int amount,vector<int>&coins,vector<vector<long>>&dp)
+    {
+          //fill up the base 
+          for(int i=0;i<=amount;i++)
+          {
+            if(i%coins[0]==0)
+            dp[0][i]=1;
+          }
+          int n=coins.size();
+          for(int i=1;i<n;i++)
+          {
+            for(int target=0;target<=amount;target++)
+            {
+         // we didn't use 0 + fuc in this call becoz i assigned it with 0 while declrtion
+                    long notPick=dp[i-1][target];
+                    long pick=0;
+                    if(coins[i]<=target)
+                    {
+                        pick=dp[i][target-coins[i]];
+                    }
+
+                 dp[i][target]=notPick+pick;
+            }
+          }
+          return dp[n-1][amount];
+    }
+    int change(int amount, vector<int>& coins) {
+        int n=coins.size();
+         vector<vector<long>> dp(n,vector<long> (amount+1,0));
+        return tabulation(n-1,amount,coins,dp);
+    }
+};
