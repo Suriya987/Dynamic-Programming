@@ -1,0 +1,100 @@
+Given a rod of length N inches and an array of prices, price[]. price[i] denotes the value of a piece of length i. 
+Determine the maximum value obtainable by cutting up the rod and selling the pieces.
+
+Note: Consider 1-based indexing.
+
+Example 1:
+
+Input:
+N = 8
+Price[] = {1, 5, 8, 9, 10, 17, 17, 20}
+Output:
+22
+Explanation:
+The maximum obtainable value is 22 by 
+cutting in two pieces of lengths 2 and 
+6, i.e., 5+17=22.
+Example 2:
+
+Input:
+N=8
+Price[] = {3, 5, 8, 9, 10, 17, 17, 20}
+Output: 
+24
+Explanation: 
+The maximum obtainable value is 
+24 by cutting the rod into 8 pieces 
+of length 1, i.e, 8*price[1]= 8*3 = 24. 
+
+
+
+approach : 
+Recursion -> Memoization and Tabulation
+
+class Solution{
+  public:
+    int func(int length,int ind,int price[],vector<vector<int>>&dp)
+    {
+        if(length==0) 
+          return 0;
+        //base case
+        if(ind==0)
+        {
+            //mistakes i've done
+            //   if(ind+1<=N){
+            //   return price[0];
+            //   }
+    // we can able to add whatever the remaining right instead of just
+    //adding 1 . we return N*price[0];
+            
+             return length*price[0];
+        }
+        
+        if(dp[ind][length]!=-1)  return dp[ind][length];
+        
+        //possiblities 
+        
+        int notPick=0+func(length,ind-1,price,dp);
+        int pick=INT_MIN;
+        int rodlength=ind+1;
+        if((ind+1)<=length)
+        {
+            pick=price[ind]+func(length-(ind+1),ind,price,dp);
+        }
+        
+        return dp[ind][length]=max(notPick,pick);
+    }
+    int tabulation(vector<vector<int>>&dp,int length,int price[])
+    {
+        //base case
+        for(int i=0;i<=length;i++)
+        {
+            dp[0][i]=i*price[0];
+        }
+        
+        for(int i=1;i<length;i++)
+        {
+            for(int len=0;len<=length;len++)
+            {
+                int notPick=0+dp[i-1][len];
+                int pick=INT_MIN;
+                int rodlength=i+1;
+                if(rodlength<=len)
+                {
+                    pick=price[i]+dp[i][len-rodlength];
+                }
+                
+               dp[i][len]=max(notPick,pick);
+            }
+        }
+       // return 1;
+        return dp[length-1][length];
+        
+    }
+    int cutRod(int price[], int n) {
+          vector<vector<int>>dp(n,vector<int>(n+1,0));
+         int ind=n;
+         return tabulation(dp,n,price);
+         // return func(n,ind-1,price,dp);
+    }
+};
