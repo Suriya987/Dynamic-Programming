@@ -1,0 +1,76 @@
+Given an integer array nums, return the length of the longest strictly increasing 
+subsequence
+.
+Example 1:
+
+Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+Example 2:
+
+Input: nums = [0,1,0,3,2,3]
+Output: 4
+Example 3:
+
+Input: nums = [7,7,7,7,7,7,7]
+Output: 1
+
+Approach :  DP 
+
+Time complexity : O(N*N)
+Space complexity " O(N*N) + O(N)
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int helper(vector<int>&nums,int ind,vector<int>&temp,vector<vector<int>>&dp,int prev_Ind)
+{
+    //base case
+     if(ind==nums.size())
+     {
+        //  for(int i=0;i<temp.size();i++)
+        //  cout<<temp[i]<<" ";
+         
+        //  cout<<endl;
+           
+        return temp.size();
+     }
+        
+        if(dp[ind][prev_Ind+1]!=-1)  return dp[ind][prev_Ind+1];
+        
+        int pick=0;
+    //pick case
+     if(temp.size()==0 || temp.back()<nums[ind])
+     {
+         temp.push_back(nums[ind]);
+         pick=helper(nums,ind+1,temp,dp,ind);
+         temp.pop_back();
+     }
+      
+       int notPick=helper(nums,ind+1,temp,dp,prev_Ind);
+       
+     
+     return dp[ind][prev_Ind+1]=max(pick,notPick);
+}
+int main()
+{
+    vector<int>nums{10,9,2,5,3,7,101,18};
+    int n=nums.size();
+    vector<int>temp;
+    vector<vector<int>>dp(n,vector<int>(n,-1));
+    
+      
+    
+    cout<<helper(nums,0,temp,dp,-1);
+    cout<<endl;
+       //for(int i=0;i<dp.size();i++)
+    // {
+    //     for(int j=0;j<dp[0].size();j++)
+    //     {
+    //         cout<<dp[i][j]<<"  ";
+    //     }
+    //     cout<<endl;
+    // }
+    return 0;
+}
