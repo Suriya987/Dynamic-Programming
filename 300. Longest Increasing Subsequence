@@ -15,6 +15,40 @@ Example 3:
 Input: nums = [7,7,7,7,7,7,7]
 Output: 1
 
+Approach : Brute force
+
+Time Complexity : O(N!)
+Space Complexity : O(N)
+
+#include<bits/stdc++.h>
+using namespace std;
+int func(int prevIndex,int currIndex,int n,vector<int>&arr)
+{
+    if(currIndex>=n)
+    return 0;
+    
+    int Pick=0;
+    if(prevIndex!=currIndex && arr[prevIndex]<arr[currIndex])
+    {
+        Pick=1+func(currIndex,currIndex+1,n,arr);
+    }
+    int Npick=0+func(prevIndex,currIndex+1,n,arr);
+    
+    return max(Pick,Npick);
+}
+int main()
+{
+    vector<int> arr={10,9,2,1000,3,7,100,180};
+    int n=arr.size();
+    int maxIncreasingSubsequence=0;
+    for(int i=0;i<n;i++)
+    {
+        maxIncreasingSubsequence=max(maxIncreasingSubsequence,1+func(i,i,n,arr));
+    }
+    cout<<maxIncreasingSubsequence;
+    return 0;
+}
+
 Approach :  DP 
 
 Time complexity : O(N*N)
