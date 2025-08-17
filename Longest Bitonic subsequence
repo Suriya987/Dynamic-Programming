@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+void f(int ind,int prevInd,int currLength,int& lastIndex,vector<int>&arr,int n,int& Length,int inc)
+{
+    if(ind>=n)return;
+    
+    //skip the current index
+    f(ind+1,prevInd,currLength,lastIndex,arr,n,Length,inc);
+    
+    
+    if(inc==0){
+    //pick the current index if it satisfies
+        if(prevInd==-1 ||  arr[prevInd]<arr[ind])
+        {
+            //update the maxLength
+            currLength+=1; 
+            if(Length<currLength){
+            Length=currLength;
+            lastIndex=ind;
+            }
+            
+            f(ind+1,ind,currLength,lastIndex,arr,n,Length,inc);
+        }
+    }
+    else
+    {
+        if(prevInd==-1 || arr[prevInd]>arr[ind])
+        {
+            currLength+=1;
+            Length=max(Length,currLength);
+            f(ind+1,ind,currLength,lastIndex,arr,n,Length,inc);
+        }
+    }
+}
+
+int main()
+{               //  0  1  2  3  4
+    vector<int>arr={1, 2, 5, 3, 2};
+    int IncmaxLength=0,decMaxLength=0;
+    int lastIndex=-1,seclastindex=-1;
+    f(0,-1,0,lastIndex,arr,arr.size(),IncmaxLength,0);
+    cout<<IncmaxLength;
+   // (int ind,int prevInd,int currLength,int& lastIndex,vector<int>&arr,int n,int& Length,int inc)
+    
+    cout<<" "<<lastIndex;
+    if(lastIndex!=-1){
+      f(lastIndex+1,-1,0,seclastindex,arr,arr.size(),decMaxLength,1);
+      cout<<IncmaxLength+decMaxLength;
+    }
+      
+  //  cout<<0;
+    return 0;
+}
