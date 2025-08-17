@@ -69,3 +69,78 @@ int main()
     }
     return 0;
 }
+
+Approach : Tabulation
+
+ vector<int> largestDivisibleSubset(vector<int>& nums) {
+          
+   
+          sort(nums.begin(),nums.end());
+ 
+       if(nums.size()<=1)
+        return nums;
+
+        int n=nums.size();
+        vector<int>count(n,1);
+        vector<int>indices;
+        for(int i=0;i<n;i++)
+        indices.push_back(i);
+         
+         int maxCount=0;
+         int maxCountIndex=-1;
+
+        //now we have the count  -> 1 , 1 , 1, 1, 1
+        //indices  -> 0 1 2 3 4 5
+
+
+        //traverse through the array and find the indices
+        for(int i=0;i<n;i++)
+        {
+            for(int pInd=0;pInd<i;pInd++)
+            {
+                if(nums[i]%nums[pInd]==0 || nums[pInd]%nums[i]==0)
+                {
+                    //check the current count is greater than prevCount
+                    //if that true then change in indices
+                    int prevCount=count[i];
+                    int currCount=count[pInd]+1;
+                    if(prevCount<currCount)
+                    {
+                       count[i]=currCount;  //-> updating the new count 
+                       indices[i]=pInd;  //-> mapping to the new index which give max  subset                 
+                       if(maxCount<count[i])
+                       {
+                        maxCount=count[i];
+                        maxCountIndex=i;
+                       }
+                    }
+                }
+            }
+        }
+
+        vector<int>result;
+        int index=maxCountIndex;
+
+          if(index==-1)
+            return {nums[0]};
+
+      
+        
+        //store that 
+        while(true)
+        {
+            int nextIndex=indices[index];
+            if(nextIndex==index)
+            {
+               result.push_back(nums[index]);
+               break;
+            }
+
+            result.push_back(nums[index]);
+            index=nextIndex; 
+
+        }
+
+        return result;
+    }
+};
