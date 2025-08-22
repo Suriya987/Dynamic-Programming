@@ -1,0 +1,104 @@
+Given a m * n matrix of ones and zeros, return how many square submatrices have all ones.
+
+
+class Solution {
+public:
+//     int helper(int row,int col,vector<vector<int>>&dp,int n,int m,vector<vector<int>>&matrix)
+//     {
+//         //base case
+//           if(row>=n || col>=m)
+//           return 0;
+
+//           //if the combination already done then use that cached value
+//           if(dp[row][col]!=-1) return dp[row][col];
+
+//           //look for all the 3 directions right,bottom,diag
+//           int right=helper(row,col+1,dp,n,m,matrix);
+//           int bottom=helper(row+1,col,dp,n,m,matrix);
+//           int diag=helper(row+1,col+1,dp,n,m,matrix);
+
+//           dp[row][col]=0;
+
+        
+
+
+//           //if the cell is 1 we need to add it with the min of rem calls
+//           if(matrix[row][col]==1)
+//           {
+//              cout<<"row "<<row<<" col  "<<col <<"  dp  "<<dp[row][col]<<"right,bottom,diag "<<right<<"    "<<bottom<< " "<<diag<<endl;
+//             dp[row][col]=1+min(right,min(bottom,diag));
+//               cout<<"row "<<row<<" col  "<<col <<"  dp  "<<dp[row][col]<<endl;
+//           }
+
+
+//           cout<<endl;
+
+            
+
+//           return dp[row][col];
+//     }
+//     int countSquares(vector<vector<int>>& matrix) {
+//         int n=matrix.size();
+//         int m=matrix[0].size();
+
+//         vector<vector<int>> dp(n,vector<int>(m,-1)); 
+        
+//         for(int i=0;i<n;i++)
+//          {
+//             for(int j=0;j<m;j++)
+//             {
+//                helper(i,j,dp,n,m,matrix); 
+//             }
+//          }
+
+//          int result=0;
+
+
+//          for(int i=0;i<n;i++)
+//          {
+//             for(int j=0;j<m;j++)
+//             {
+//               //  cout<<dp[i][j]<<" ";
+//                if(dp[i][j]>0)
+//                result+=dp[i][j];
+//             }
+//             cout<<endl;
+//          }
+
+//          return result;
+
+
+//     }
+// };
+
+
+    int countSquares(vector<vector<int>>& matrix) {
+
+int n=matrix.size();
+int m=matrix[0].size();
+int result=0;
+
+vector<vector<int>>dp(n+1,vector<int>(m+1,0));
+for(int i=n-1;i>=0;i--)
+{
+    for(int j=m-1;j>=0;j--)
+    {
+        if(matrix[i][j]==1){
+        int right=dp[i][j+1];
+        int bottom=dp[i+1][j];
+        int diag=dp[i+1][j+1];
+
+        dp[i][j]=0;
+
+       
+            dp[i][j]=1+min(right,min(bottom,diag));
+    
+        }
+
+        result+=dp[i][j];
+
+    }
+}
+
+ return result;
+    }};
