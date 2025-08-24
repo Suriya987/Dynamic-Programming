@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Pair: {LIS length, count of LIS}
+pair<int,int> helper(int ind, int prev, vector<int>& arr, vector<vector<pair<int,int>>>& dp) {
+    if (ind >= arr.size()) return {0, 1}; // base: LIS length 0, count = 1 (empty subsequence)
+
+    if (dp[prev+1][ind].first != -1) 
+        return dp[prev+1][ind];
+
+    // Option 1: not pick
+    pair<int,int> notPick = helper(ind+1, prev, arr, dp);
+
+    // Option 2: pick (if valid)
+    pair<int,int> pick = {0,0};
+    if (prev == -1 || arr[prev] < arr[ind]) {
+        auto nxt = helper(ind+1, ind, arr, dp);
+        pick.first = 1 + nxt.first;   // increase length
+        pick.second = nxt.second;     // inherit ways
+    }
+
+    // Compare pick vs notPick
+    pair<int,int> ans;
+    if (pick.first > notPick.first) {
+        ans = pick;
+    } else if (notPick.first > pick.first) {
+        ans = notPick;
+    } else { 
+        // both give same LIS length → add counts
+        ans.first = pick.first;
+        ans.second = pick.second + notPick.second;
+    }
+
+    return dp[prev+1][ind] = ans;
+}
+
+int main() {
+    vector<int> arr = {1, 3, 5, 4, 7};
+    int n = arr.size();
+
+    // dp[prev+1][ind] → pair(length, count)
+    vector<vector<pair<int,int>>> dp(n+1, vector<pair<int,int>>(n+1, {-1, -1}));
+
+    auto res = helper(0, -1, arr, dp);
+
+    cout << "LIS length = " << res.first << "\n";
+    cout << "Number of LIS = " << res.second << "\n";
+    return 0;
+}
