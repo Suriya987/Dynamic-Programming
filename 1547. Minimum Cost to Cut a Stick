@@ -1,0 +1,37 @@
+Approach : Memoization
+
+Time complexity : O(M^3)  m is the size of the cuts 
+Space complexity : O(M^2) for dp and O(M) is the recursive stack space
+
+class Solution {
+public:
+    long f(int i,int j,vector<int>&cuts,vector<vector<int>>&dp)
+    {
+        //base case
+        if(i>j) return 0;
+long mini=INT_MAX;
+
+   if(dp[i][j]!=-1)  return dp[i][j];
+   sort(cuts.begin(),cuts.end());
+        for(int ind=i;ind<=j;ind++)
+        {
+            long cutSize=cuts[j+1]-cuts[i-1]+f(i,ind-1,cuts,dp)+f(ind+1,j,cuts,dp);
+             mini=min(cutSize,mini);
+        }
+
+        return dp[i][j]=mini;
+    }
+    int minCost(int n, vector<int>& cuts) {
+
+        
+        
+        cuts.insert(cuts.begin(),0);
+        cuts.push_back(n);
+        int cutsize=cuts.size()-2;
+
+      vector<vector<int>>dp(cutsize+2,vector<int>(cutsize+2,-1));
+
+ long res=f(1,cutsize,cuts,dp);
+        return res;
+    }
+};
