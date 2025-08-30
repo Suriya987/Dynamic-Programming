@@ -1,0 +1,58 @@
+You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
+
+If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
+
+Return the maximum coins you can collect by bursting the balloons wisely.
+
+Soln :
+
+class Solution {
+public:
+    long f(int left,int right , vector<int>&nums,vector<vector<int>>&dp)
+    {
+        if(left>right) return 0;
+
+         if(dp[left][right]!=-1)  return dp[left][right];
+
+        long res=INT_MIN;
+
+        //check all the possibles
+        for(int k=left;k<=right;k++)
+        {
+            long coins=nums[left-1]*nums[k]*nums[right+1];
+
+            long total=f(left,k-1,nums,dp)+f(k+1,right,nums,dp);
+
+             res=max(res,coins+total);
+
+        }
+        return dp[left][right]=res;
+    }
+    int maxCoins(vector<int>& nums) {
+          int n=nums.size();
+            nums.push_back(1);
+            nums.insert(nums.begin(),1);
+           vector<vector<int>>dps(nums.size(),vector<int>(nums.size(),-1));
+
+           vector<vector<int>>dp(nums.size(),vector<int>(nums.size(),0));
+           for(int i=n;i>=1;i--)
+           {
+                for(int j=1;j<=n;j++)
+                {
+                    //base case   whenerv there is no pair exist 
+                    if(i>j)  continue;  //for this 0 return we convered in the dp declration
+                    long res=INT_MIN;
+                        for(int k=i;k<=j;k++)
+                        {
+                            long coins=nums[i-1]*nums[k]*nums[j+1];
+                            long total=dp[i][k-1]+dp[k+1][j];
+                            res=max(res,coins+total);
+                        }
+                dp[i][j]=res;
+                }
+        }
+           
+           return dp[1][nums.size()-2];
+          return f(1,nums.size()-2,nums,dp);    //for recursive+memo                  
+    }
+};
