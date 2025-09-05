@@ -1,0 +1,136 @@
+
+
+my soln:
+
+class Solution {
+  public:
+    int helper(int start,int end,string &s)
+    {
+        //base case
+        if(start>end) return 0;
+        if(start==end)  return s[start]=='T'?1:0;
+        
+        int count=0;
+        
+        //try out all possiblities
+        for(int i=start;i<=end;i=i+2)
+        {
+            int left=helper(start,i-1,s);
+            int right=helper(i+1,end,s);
+            int result=0;
+            if(s[i]=='&')
+            {
+                //both left and right should be greater than 0
+                if(left>0 && right>0)
+                result=1;
+                
+            }
+            else if(s[i]=='^')
+            {
+                //one should be 0
+                if(left==0 || right==0)
+                result=1;
+            }
+            else if(s[i]=='|')
+            {
+                //any one should more than 0
+                if(left>0 || right>0)
+                  result=1;
+            }
+            
+            count+=result;
+        }
+        
+        return count;
+    }
+    int countWays(string &s) {
+        // code here
+        
+    }
+};
+
+Correct Soln: 
+
+for >32 bit output 
+
+// User function Template for C++
+class Solution {
+  public:
+   
+#define ll long long
+//const int mod = 1000000007;
+ const int mod = 1003;
+
+int helper(int i,int j,string &s,int isTrue,vector<vector<vector<int>>>&dp)
+{
+    //base cases
+    
+    if(i>j) return 0;
+    
+    if(i==j)
+    {
+        //check true and false 
+        if(isTrue) return s[i]=='T'?1:0;
+        else 
+        return s[i]=='F'?1:0;
+    }
+    
+    if(dp[i][j][isTrue]!=-1)  return dp[i][j][isTrue];
+    
+    ll values=0;
+    for(int ind=i+1;ind<j;ind=ind+2)
+    {
+        //find leftTrue , leftFalse , rightTrue,rightFalse
+        ll leftTrue=helper(i,ind-1,s,1,dp);
+        ll leftFalse=helper(i,ind-1,s,0,dp);
+        ll rightTrue=helper(ind+1,j,s,1,dp);
+        ll rightFalse=helper(ind+1,j,s,0,dp);
+        
+         if(s[ind]=='^')
+         {
+             //both should not be equal for true scenario
+             if(isTrue)
+             values= (values+(leftTrue*rightFalse)%mod +  (leftFalse*rightTrue)%mod)%mod;
+             else
+             values=(values+(leftTrue*rightTrue)%mod  +  (leftFalse*rightFalse)%mod)%mod;     //both should be equal for false scenario 
+         }
+         else if(s[ind]=='|')
+         {
+             //take the combination which will give true
+             if(isTrue)
+             {
+                 values=(values+(leftTrue*rightTrue)%mod +  (leftTrue*rightFalse)%mod + (leftFalse*rightTrue)%mod)%mod ;
+             }
+             else
+             {
+                 values=(values+(leftFalse*rightFalse)%mod)%mod;  //both should be false
+             }
+         }
+         else if(s[ind]=='&')
+         {
+             if(isTrue)
+             {
+                 values=(values+(leftTrue*rightTrue)%mod)%mod;
+             }
+             else
+             {
+                 values=(values+(leftTrue*rightFalse)%mod + (leftFalse*rightTrue)%mod + (leftFalse*rightFalse)%mod)%mod;
+             }
+         }
+    }
+    
+    return dp[i][j][isTrue]=values;
+    
+}
+    int countWays(string &s) {
+         int n=s.size();
+         vector<vector<vector<int>>>dp(n+1,vector<vector<int>>(n+1,vector<int>(2,-1)));
+        int result=helper(0,n-1,s,1,dp);
+        //cout<<result;
+        return result;
+    }
+};
+
+
+For 32 bit integere output
+
